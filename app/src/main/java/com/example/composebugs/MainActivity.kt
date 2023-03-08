@@ -42,7 +42,7 @@ class MainActivity : ComponentActivity() {
                         LoadingDialog(showLoadingDialog = isLoading.value)
                         if (error.value.isNotBlank()) {
                             Text(
-                                text = error.value,
+                                text = error.value, // This is the text that gets interrupted by clickable text
                                 style = MaterialTheme.typography.bodySmall.copy(color = Color.Red),
                                 modifier = Modifier
                                     .padding(top = 2.dp)
@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
                             )
                         }
                         Text(
-                            "End"
+                            "End" // This text is required in order between error and clickable text.  Not sure why
                         )
                         Text(
                             "Clickable Text",
@@ -79,7 +79,7 @@ fun LoadingDialog(showLoadingDialog: Boolean) {
         Dialog(
             onDismissRequest = { }
         ) {
-            Text("Dialog")
+            Text("Dialog") // If we remove this Text the issue does not appear.  I assume due to this dialog not getting talkback focus
         }
     }
 }
