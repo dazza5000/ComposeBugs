@@ -6,23 +6,32 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.focusable
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Text
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.animateColor
+import androidx.compose.animation.core.*
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.focus.focusTarget
 import androidx.compose.ui.focus.onFocusChanged
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.StrokeCap
+import androidx.compose.ui.graphics.drawscope.rotate
+import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalInspectionMode
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.semantics.LiveRegionMode
+import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.liveRegion
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
@@ -43,16 +52,35 @@ class MainActivity : ComponentActivity() {
             val focusRequester = remember { FocusRequester() }
             var color by remember { mutableStateOf(Color.White) }
 
-            LaunchedEffect(key1 = error.value, block = {
-                if (error.value.isNotBlank()) {
-                    focusRequester.requestFocus()
-                }
-            })
+//            LaunchedEffect(key1 = error.value, block = {
+//                if (error.value.isNotBlank()) {
+//                    focusRequester.requestFocus()
+//                }
+//            })
 
             ComposeBugsTheme {
                 Scaffold {
+                    androidx.compose.animation.AnimatedVisibility(
+                        visible = isLoading.value,
+                        enter = fadeIn(),
+                        exit = fadeOut(),
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .fillMaxHeight()
+                                .background(Color.DarkGray),
+                        ) {
+                            NiaOverlayLoadingWheel(
+                                modifier = Modifier
+                                    .align(Alignment.Center),
+                                contentDesc = "foo",
+                            )
+                        }
+                    }
                     Column(modifier = Modifier.padding(it)) {
-                        LoadingDialog(showLoadingDialog = isLoading.value)
+//                        LoadingDialog(showLoadingDialog = isLoading.value)
+
                         if (error.value.isNotBlank()) {
                             Text(
                                 text = error.value, // This is the text that gets interrupted by clickable text
@@ -62,13 +90,13 @@ class MainActivity : ComponentActivity() {
                                     .semantics(mergeDescendants = true) {
                                         liveRegion = LiveRegionMode.Assertive
                                     }
-                                    .focusRequester(focusRequester)
-                                    .onFocusChanged {
-                                        color = if (it.isFocused) Color.Green else Color.White
-                                    }
-                                    .focusable(enabled = true)
-                                    .focusTarget()
-                                    .border(2.dp, color)
+//                                    .focusRequester(focusRequester)
+//                                    .onFocusChanged {
+//                                        color = if (it.isFocused) Color.Green else Color.White
+//                                    }
+//                                    .focusable(enabled = true)
+//                                    .focusTarget()
+//                                    .border(2.dp, color)
                             )
                         }
                         Text(
@@ -109,3 +137,84 @@ fun LoadingDialog(showLoadingDialog: Boolean) {
         }
     }
 }
+
+@Composable
+fun NiaLoadingWheel(
+    contentDesc: String,
+    modifier: Modifier = Modifier,
+) {
+    val infiniteTransition = rememberInfiniteTransition()
+
+    // Specifies the float animation for slowly drawing out the lines on entering
+    val startValue = if (LocalInspectionMode.current) 0F else 1F
+    val floatAnimValues = (0 until 7).map { remember { Animatable(startValue) } }
+    LaunchedEffect(floatAnimValues) {
+        (0 until 7).map { index ->
+            launch {
+                floatAnimValues[index].animateTo(
+                    targetValue = 0F,
+                    animationSpec = tween(
+                        durationMillis = 100,
+                        easing = FastOutSlowInEasing,
+                        delayMillis = 40 * index,
+                    ),
+                )
+            }
+        }
+    }
+
+    // Specifies the rotation animation of the entire Canvas composable
+    val rotationAnim by infiniteTransition.animateFloat(
+        initialValue = 0F,
+        targetValue = 360F,
+        animationSpec = infiniteRepeatable(
+            animation = tween(durationMillis = 300, easing = LinearEasing),
+        ),
+    )
+
+    // Specifies the color animation for the base-to-progress line color change
+
+    // Draws out the LoadingWheel Canvas composable and sets the animations
+    Canvas(
+        modifier = modifier
+            .size(48.dp)
+            .padding(8.dp)
+            .graphicsLayer { rotationZ = rotationAnim }
+            .semantics { contentDescription = contentDesc }
+            .testTag("loadingWheel"),
+    ) {
+        repeat(7) { index ->
+            rotate(degrees = index * 30f) {
+                drawLine(
+                    color = Color.Black,
+                    // Animates the initially drawn 1 pixel alpha from 0 to 1
+                    alpha = if (floatAnimValues[index].value < 1f) 1f else 0f,
+                    strokeWidth = 4F,
+                    cap = StrokeCap.Round,
+                    start = Offset(size.width / 2, size.height / 4),
+                    end = Offset(size.width / 2, floatAnimValues[index].value * size.height / 4),
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun NiaOverlayLoadingWheel(
+    contentDesc: String,
+    modifier: Modifier = Modifier,
+) {
+    Surface(
+        shape = RoundedCornerShape(60.dp),
+        shadowElevation = 8.dp,
+        color = MaterialTheme.colorScheme.surface.copy(alpha = 0.83f),
+        modifier = modifier
+            .size(60.dp),
+    ) {
+        NiaLoadingWheel(
+            contentDesc = contentDesc,
+        )
+    }
+}
+
+
