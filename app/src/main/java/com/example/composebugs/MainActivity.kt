@@ -6,17 +6,21 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.focus.focusTarget
+import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.semantics.LiveRegionMode
 import androidx.compose.ui.semantics.liveRegion
@@ -36,6 +40,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             val error = remember { mutableStateOf("") }
             val isLoading = remember { mutableStateOf(false) }
+            val focusRequester = remember { FocusRequester() }
+            var color by remember { mutableStateOf(Color.White) }
+
+            LaunchedEffect(key1 = error.value, block = {
+                if (error.value.isNotBlank()) {
+                    focusRequester.requestFocus()
+                }
+            })
+
             ComposeBugsTheme {
                 Scaffold {
                     Column(modifier = Modifier.padding(it)) {
@@ -49,6 +62,13 @@ class MainActivity : ComponentActivity() {
                                     .semantics(mergeDescendants = true) {
                                         liveRegion = LiveRegionMode.Assertive
                                     }
+                                    .focusRequester(focusRequester)
+                                    .onFocusChanged {
+                                        color = if (it.isFocused) Color.Green else Color.White
+                                    }
+                                    .focusable(enabled = true)
+                                    .focusTarget()
+                                    .border(2.dp, color)
                             )
                         }
                         Text(
@@ -57,14 +77,20 @@ class MainActivity : ComponentActivity() {
                         Text(
                             "Clickable Text",
                             modifier = Modifier.clickable {
+
                                 lifecycleScope.launch {
                                     isLoading.value = true
+
                                     delay(500L) // This delay allows time for focus to change to the dialog.  Removing or making it like 100 is basically the same as no dialog
                                     isLoading.value = false
+
                                     // delay(10000L) This actually fixes the issue but weird enough it takes like 5 seconds for this clickable text to get focus
                                     error.value = if (error.value.isBlank()) "Name is required" else ""
+
+
                                 }
                             }
+
                         )
                     }
                 }
