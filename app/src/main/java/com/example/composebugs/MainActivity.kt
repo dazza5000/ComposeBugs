@@ -25,6 +25,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import androidx.lifecycle.lifecycleScope
 import com.example.composebugs.ui.theme.ComposeBugsTheme
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -47,7 +48,7 @@ class MainActivity : ComponentActivity() {
                                 modifier = Modifier
                                     .padding(top = 2.dp)
                                     .semantics(mergeDescendants = true) {
-                                        liveRegion = LiveRegionMode.Assertive
+                                        liveRegion = LiveRegionMode.Polite
                                     }
                             )
                         }
@@ -59,7 +60,14 @@ class MainActivity : ComponentActivity() {
                             modifier = Modifier.clickable {
                                 lifecycleScope.launch {
                                     isLoading.value = true
-                                    delay(500L) // This delay allows time for focus to change to the dialog.  Removing or making it like 100 is basically the same as no dialog
+                                    val progressDialogDelay = lifecycleScope.async {
+                                        // If accessibility services are enabled, set a minimum time for the dialog to be shown
+                                        // to give talkback time to process and announce the window updates
+                                        delay(1500L)
+                                    }
+
+                                    progressDialogDelay.await()
+
                                     isLoading.value = false
                                     // delay(10000L) This actually fixes the issue but weird enough it takes like 5 seconds for this clickable text to get focus
                                     error.value = if (error.value.isBlank()) "Name is required" else ""
