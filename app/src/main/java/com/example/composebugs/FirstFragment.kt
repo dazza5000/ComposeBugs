@@ -24,7 +24,6 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.findNavController
 import com.example.composebugs.ui.theme.ComposeBugsTheme
 
 class FirstFragment : Fragment() {
@@ -79,9 +78,17 @@ fun FirstScreen(navController: NavController) {
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp).clickable {
-                            navController.navigate(com.example.composebugs.R.id.action_FirstFragment_to_SecondFragment)
+                            navController.navigate(R.id.action_FirstFragment_to_SecondFragment)
                         },
-                    text = "title"
+                    text = "2nd"
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp).clickable {
+                            navController.navigate(R.id.action_FirstFragment_to_ThirdFragment)
+                        },
+                    text = "3rd"
                 )
             }
         }
