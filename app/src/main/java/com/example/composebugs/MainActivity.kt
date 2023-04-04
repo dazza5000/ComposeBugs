@@ -162,6 +162,9 @@ class MainActivity : ComponentActivity() {
 }
 
 
+val bogusTag = "bogusTag"
+val bogusField = "bogusField"
+
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun bogusField() {
@@ -175,10 +178,10 @@ fun bogusField() {
             bogus.value = it
         },
         modifier = Modifier
-            .testTag("bogusTag")
+            .testTag(bogusTag)
             .fillMaxWidth(),
         placeholder = {
-            Text("bogusField")
+            Text(bogusField)
         },
         keyboardActions = KeyboardActions(
             onDone = {
