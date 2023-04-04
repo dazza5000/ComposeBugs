@@ -26,7 +26,7 @@ import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import com.example.composebugs.ui.theme.ComposeBugsTheme
 
-class FirstFragment : Fragment() {
+class MainFragment : Fragment() {
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,14 +35,14 @@ class FirstFragment : Fragment() {
     ): View {
         return ComposeView(requireContext()).apply {
             setContent {
-                FirstScreen(findNavController())
+                MainScreen(findNavController())
             }
         }
     }
 }
 
 @Composable
-fun FirstScreen(navController: NavController) {
+fun MainScreen(navController: NavController) {
     ComposeBugsTheme {
         Scaffold(
             topBar = {
@@ -71,16 +71,42 @@ fun FirstScreen(navController: NavController) {
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(16.dp),
-                    text = "Extra space required"
+                        .padding(16.dp).clickable {
+                            navController.navigate(R.id.action_MainFragment_to_FirstFragment)
+                        },
+                    text = "1st"
                 )
                 Text(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(16.dp).clickable {
-                            navController.navigate(R.id.action_FirstFragment_to_SecondFragment)
+                            navController.navigate(R.id.action_MainFragment_to_ThirdFragment)
                         },
-                    text = "2nd"
+                    text = "3rd"
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp).clickable {
+                            navController.navigate(R.id.action_MainFragment_to_FifthFragment)
+                        },
+                    text = "5th"
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp).clickable {
+                            navController.navigate(R.id.action_MainFragment_to_SixthFragment)
+                        },
+                    text = "6th"
+                )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp).clickable {
+                            navController.navigate(R.id.action_MainFragment_to_SeventhFragment)
+                        },
+                    text = "7th"
                 )
             }
         }
