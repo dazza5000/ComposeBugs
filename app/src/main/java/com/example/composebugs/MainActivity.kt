@@ -17,6 +17,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
 import com.example.composebugs.ui.theme.ComposeBugsTheme
 
 
@@ -46,6 +47,8 @@ class MainActivity : ComponentActivity() {
                             Text("Button")
                         }
                     }) {
+                    
+                    LoadingDialog(showLoadingDialog = false)
 
                     Column(
                         modifier = Modifier
@@ -54,10 +57,10 @@ class MainActivity : ComponentActivity() {
                             .verticalScroll(rememberScrollState())
                             .testTag("bar")
                     ) {
-                        var uno = remember { mutableStateOf(TextFieldValue("")) }
-                        var dos = remember { mutableStateOf(TextFieldValue("")) }
-                        var tres = remember { mutableStateOf(TextFieldValue("")) }
-                        var cuatro = remember { mutableStateOf(TextFieldValue("")) }
+                        var uno = remember { mutableStateOf(TextFieldValue("does")) }
+                        var dos = remember { mutableStateOf(TextFieldValue("this")) }
+                        var tres = remember { mutableStateOf(TextFieldValue("work")) }
+                        var cuatro = remember { mutableStateOf(TextFieldValue("123 Main Street")) }
 
 
                         Column(
@@ -71,6 +74,9 @@ class MainActivity : ComponentActivity() {
                             ListItemView(title = "foo", subtitle = "bar", onClick = {})
                             ListItemView(title = "foo", subtitle = "bar", onClick = {})
 
+                            WellTextInputLayout(modifier = Modifier, value = "foo", hint = "bar")
+
+
                             TextField(
                                 uno.value,
                                 onValueChange = {
@@ -78,6 +84,7 @@ class MainActivity : ComponentActivity() {
                                 },
                                 modifier = Modifier
                                     .testTag(WELL_TEXT_FIELD_TEST_TAG)
+                                    .padding(all = 8.dp)
                                     .fillMaxWidth(),
                                 placeholder = {
                                     Text("uno")
@@ -91,12 +98,13 @@ class MainActivity : ComponentActivity() {
                             )
                         }
 
-                        TextField(
+                        OutlinedTextField(
                             dos.value, onValueChange = {
                                 dos.value = it
                             },
                             modifier = Modifier
                                 .testTag(WELL_TEXT_FIELD_TEST_TAG)
+                                .padding(all = 8.dp)
                                 .fillMaxWidth(),
                             placeholder = {
                                 Text("dos")
@@ -108,12 +116,13 @@ class MainActivity : ComponentActivity() {
                             ),
                             singleLine = true
                         )
-                        TextField(
+                        OutlinedTextField(
                             tres.value, onValueChange = {
                                 tres.value = it
                             },
                             modifier = Modifier
                                 .testTag(WELL_TEXT_FIELD_TEST_TAG)
+                                .padding(all = 8.dp)
                                 .fillMaxWidth(),
                             placeholder = {
                                 Text("tres")
@@ -154,6 +163,9 @@ class MainActivity : ComponentActivity() {
                         bogusField()
                         bogusField()
                         bogusField()
+
+                        WellTextInputLayout(modifier = Modifier, value = "foo", hint = "bar")
+                        WellTextInputLayout(modifier = Modifier, value = "foo", hint = "bar")
                     }
                 }
             }
@@ -169,26 +181,20 @@ val bogusField = "bogusField"
 @Composable
 fun bogusField() {
     val softwareKeyboardController = LocalSoftwareKeyboardController.current
-    var bogus = remember { mutableStateOf(TextFieldValue("")) }
+    var bogus = remember { mutableStateOf(TextFieldValue("456 south 7th")) }
 
 
 
-    TextField(
-        bogus.value, onValueChange = {
+    WellTextField(
+        value = bogus.value,
+        onValueChange = {
             bogus.value = it
         },
         modifier = Modifier
             .testTag(bogusTag)
+            .padding(all = 8.dp)
             .fillMaxWidth(),
-        placeholder = {
-            Text(bogusField)
-        },
-        keyboardActions = KeyboardActions(
-            onDone = {
-                softwareKeyboardController?.hide()
-            },
-        ),
-        singleLine = true
+        label = "bogus field"
     )
 }
 
