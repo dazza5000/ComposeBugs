@@ -211,6 +211,11 @@ fun ProfileScreen(
             }
         ) { paddingValues ->
 
+            LoadingDialog(showLoadingDialog = false)
+
+            LaunchedEffect(key1 = Unit, block = {
+
+            })
 
             Column(
                 modifier = Modifier
@@ -372,13 +377,14 @@ fun ProfileScreen(
                     },
                     label = "stringResource(R.string.address_line_1)"
                 )
+                WellDropdownMenu(hint = "gender", items = GendersDropDown.getList().map { it.displayValue })
                 WellTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
                             top = 16.dp,
 
-                        ),
+                            ),
                     value = addressTwo,
                     onValueChange = {
                         addressTwo = it
@@ -392,7 +398,7 @@ fun ProfileScreen(
                         .padding(
                             top = 16.dp,
 
-                        ),
+                            ),
                     value = city,
                     onValueChange = {
                         city = it
