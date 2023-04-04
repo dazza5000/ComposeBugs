@@ -4,8 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.padding
@@ -13,9 +11,7 @@ import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.material.TopAppBar
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 
 class SeventhFragment : Fragment() {
@@ -33,10 +29,9 @@ class SeventhFragment : Fragment() {
                     }
                 ) { paddingValue ->
                     Row(
-                        modifier = Modifier.padding(paddingValue),
-                        horizontalArrangement = Arrangement.spacedBy(10.dp)
+                        modifier = Modifier.padding(paddingValue)
                     ) {
-                        Column(modifier = Modifier.background(Color.LightGray).padding(10.dp).weight(1f)) {
+                        Column {
                             Text(
                                 text = "0"
                             )
@@ -44,7 +39,7 @@ class SeventhFragment : Fragment() {
                                 text = "Active streak"
                             )
                         }
-                        Column(modifier = Modifier.background(Color.LightGray).padding(10.dp).weight(1f)) {
+                        Column {
                             Text(
                                 text = "78"
                             )

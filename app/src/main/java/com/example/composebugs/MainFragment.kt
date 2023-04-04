@@ -47,7 +47,7 @@ fun MainScreen(navController: NavController) {
         Scaffold(
             topBar = {
                 TopAppBar(
-                    title = { Text("Well Design System") },
+                    title = { Text("Title") },
                     navigationIcon = {
                         IconButton(
                             onClick = {
