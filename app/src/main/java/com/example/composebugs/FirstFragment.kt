@@ -98,6 +98,14 @@ fun FirstScreen(navController: NavController) {
                         },
                     text = "5th"
                 )
+                Text(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.dp).clickable {
+                            navController.navigate(R.id.action_FirstFragment_to_SixthFragment)
+                        },
+                    text = "6th"
+                )
             }
         }
     }
