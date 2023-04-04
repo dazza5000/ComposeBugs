@@ -101,18 +101,10 @@ fun WellTextField(
         val multiLineModifier = Modifier
             .fillMaxSize()
 
-        BasicTextField(
+        OutlinedTextField(
             value = value,
             onValueChange = { value: TextFieldValue ->
-//              https://issuetracker.google.com/issues/202353328
-//              https://issuetracker.google.com/issues/225399256
-                if (mask != null) {
-                    if (value.text.length <= maskLength) onValueChange.invoke(value)
-                } else if (keyboardOptions.keyboardType == KeyboardType.Number) {
-                    if (!value.text.contains('.')) onValueChange.invoke(value)
-                } else {
                     onValueChange.invoke(value)
-                }
             },
             modifier = if (hideLabel && minHeight == TextFieldDefaults.MinHeight) {
                 multiLineModifier
@@ -135,27 +127,8 @@ fun WellTextField(
             ),
             interactionSource = interactionSource,
             singleLine = maxLines == 1,
-            minLines = minLines,
             maxLines = maxLines,
-            decorationBox = @Composable { innerTextField ->
-                TextFieldDefaults.OutlinedTextFieldDecorationBox(
-                    value = value.text,
-                    innerTextField = innerTextField,
-                    placeholder = placeholder,
-                    label = label,
-                    enabled = enabled,
-                    interactionSource = interactionSource,
-                    colors = colors,
-                    border = {
-                        TextFieldDefaults.BorderBox(
-                            true,
-                            false,
-                            interactionSource,
-                            TextFieldDefaults.outlinedTextFieldColors()
-                        )
-                    }
-                )
-            }
+            label = { Text(label) }
         )
 
         // https://issuetracker.google.com/u/1/issues/268294552
@@ -180,7 +153,6 @@ fun WellTextField(
     }
 }
 
-}
 
 enum class InputType {
     TEXT,

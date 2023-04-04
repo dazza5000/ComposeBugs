@@ -196,7 +196,6 @@ fun ProfileScreen(
             topBar = {
                 TopAppBar(
                     title = { Text("foo") },
-                    navController = navController
                 )
             },
             bottomBar = {
@@ -204,7 +203,7 @@ fun ProfileScreen(
                     Button(
                         modifier = Modifier
                             .fillMaxWidth(),
-                        onClick = { saveProfileChanges.invoke() }
+                        onClick = { }
                     ) {
                         Text("bar")
                     }
@@ -281,17 +280,17 @@ fun ProfileScreen(
                 }
                 var addressOne by remember {
                     mutableStateOf(
-                        TextFieldValue("content.consumer.getPreferredAddress()?.addressOne.orEmpty()")
+                        TextFieldValue("123 foobar street")
                     )
                 }
                 var addressTwo by remember {
                     mutableStateOf(
-                        TextFieldValue("content.consumer.getPreferredAddress()?.addressTwo.orEmpty()")
+                        TextFieldValue("")
                     )
                 }
                 var city by remember {
                     mutableStateOf(
-                        TextFieldValue("content.consumer.getPreferredAddress()?.city.orEmpty()")
+                        TextFieldValue("")
                     )
                 }
                 var state by remember {
@@ -338,24 +337,19 @@ fun ProfileScreen(
                         .fillMaxWidth()
                         .padding(
                             top = 16.dp,
-                            start = spacingHorizontal,
-                            end = spacingHorizontal
                         ),
                     value = preferredName,
                     onValueChange = {
                         preferredName = it
                         updatePreferredName.invoke(it.text)
                     },
-                    label = stringResource(R.string.preferred_name),
-                    errorMessage = content.preferredNameError
+                    label = "stringResource(R.string.preferred_name)",
                 )
                 WellTextField(
                     modifier = Modifier
                         .fillMaxWidth()
                         .padding(
                             top = 16.dp,
-                            start = spacingHorizontal,
-                            end = spacingHorizontal
                         ),
                     value = dateOfBirth,
                     onValueChange = {
@@ -363,8 +357,7 @@ fun ProfileScreen(
                         updateDateOfBirth.invoke(it.text)
                     },
                     inputType = InputType.DATE,
-                    label = stringResource(R.string.date_of_birth),
-                    errorMessage = content.dobError
+                    label = "stringResource(R.string.date_of_birth)",
                 )
                 WellTextField(
                     modifier = Modifier
@@ -405,7 +398,7 @@ fun ProfileScreen(
                         city = it
                         updateCity.invoke(it.text)
                     },
-                    label = stringResource(R.string.city)
+                    label = "stringResource(R.string.city)"
                 )
                 Row(
                     modifier = Modifier
