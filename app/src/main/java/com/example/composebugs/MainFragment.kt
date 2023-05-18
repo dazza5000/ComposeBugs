@@ -106,7 +106,7 @@ fun MainScreen(navController: NavController) {
                         .padding(16.dp).clickable {
                             navController.navigate(R.id.action_MainFragment_to_SeventhFragment)
                         },
-                    text = "7th"
+                    text = "Card / Surface grouping"
                 )
             }
         }
