@@ -6,7 +6,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -21,10 +20,7 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.semantics.CollectionInfo
-import androidx.compose.ui.semantics.collectionInfo
 import androidx.compose.ui.semantics.contentDescription
-import androidx.compose.ui.semantics.role
 import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
@@ -42,7 +38,7 @@ class SixthFragment : Fragment() {
                 Scaffold(
                     topBar = {
                         TopAppBar(
-                            title = { androidx.compose.material3.Text("Title") }
+                            title = { Text("Title") }
                         )
                     }
                 ) { paddingValues ->
@@ -57,7 +53,7 @@ class SixthFragment : Fragment() {
                         }
 
                         item {
-                        Text("bar")
+                            Text("bar")
 
                         }
 
@@ -70,9 +66,6 @@ class SixthFragment : Fragment() {
 
 
                                     Row(
-                                        modifier = Modifier.semantics(mergeDescendants = true) {
-
-                                        },
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
@@ -83,7 +76,7 @@ class SixthFragment : Fragment() {
                                             alignment = Alignment.CenterStart,
                                         )
 
-                                        androidx.compose.material3.Text(
+                                        Text(
                                             "Beginning Text"
                                         )
 
@@ -93,15 +86,12 @@ class SixthFragment : Fragment() {
                                             },
                                             horizontalArrangement = Arrangement.End
                                         ) {
-                                            androidx.compose.material3.Text(
+                                            Text(
                                                 text = "End Text",
                                             )
                                         }
                                     }
                                     Row(
-                                        modifier = Modifier.semantics(mergeDescendants = true) {
-
-                                        },
                                         horizontalArrangement = Arrangement.SpaceBetween,
                                         verticalAlignment = Alignment.CenterVertically
                                     ) {
@@ -112,7 +102,7 @@ class SixthFragment : Fragment() {
                                             alignment = Alignment.CenterStart,
                                         )
 
-                                        androidx.compose.material3.Text(
+                                        Text(
                                             "Beginning Text"
                                         )
 
@@ -122,7 +112,7 @@ class SixthFragment : Fragment() {
                                             },
                                             horizontalArrangement = Arrangement.End
                                         ) {
-                                            androidx.compose.material3.Text(
+                                            Text(
                                                 text = "End Text",
                                             )
                                         }
